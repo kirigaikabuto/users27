@@ -65,3 +65,17 @@ func (u *usersStore) GetByUsernameAndPassword(username, password string) (*User,
 	}
 	return user, nil
 }
+
+func (u *usersStore) List() ([]User, error) {
+	filter := bson.D{}
+	users := []User{}
+	cursor, err := u.collection.Find(context.TODO(), filter)
+	if err != nil {
+		return nil, err
+	}
+	err = cursor.All(context.TODO(), &users)
+	if err != nil {
+		return nil, err
+	}
+	return users, nil
+}
